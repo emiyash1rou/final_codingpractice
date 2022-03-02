@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
+use App\Http\Controllers\AppsController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -28,15 +29,18 @@ use App\Http\Controllers\PagesController;
 Route::get('/users',function(){
     return 'Welcome to the users page';
 });
-
-Route::get('/home',[PagesController::class,'home'])->name('home');
-Route::get('/apps',[PagesController::class,'index'])->name('apps');
-Route::get('/apps/about',[PagesController::class,'about']);
+// pages Controller
+Route::get('/home',[PagesController::class,'index'])->name('home');
+Route::get('/account',[PagesController::class,'account'])->name('account');
+Route::get('/help',[PagesController::class,'help'])->name('help');
+Route::get('/about',[PagesController::class,'about']);
+// apps controller
+Route::get('/apps',[AppsController::class,'index'])->name('apps_index');
 //Pattern is an integer
 // Route::get('/apps/{id}',[AppsController::class,'show'])-> where('id','[0-9]+');
-Route::get('/apps/{name}/{id}',[PagesController::class,'show'])-> where([
-    'name'=>'[a-zA-Z]+',
-    'id' => '[0-9]+'
+// Route::get('/apps/{name}/{id}',[PagesController::class,'show'])-> where([
+//     'name'=>'[a-zA-Z]+',
+//     'id' => '[0-9]+'
 
-]);
+// ]);
 // Route::get('/apps','App\Http\Controllers\AppsController@index',function(){});

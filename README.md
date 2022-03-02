@@ -170,4 +170,143 @@ Route::get('/apps/{name}/{id}',[AppsController::class,'show'])-> where([
 
 ```
 # STOPPED AT 2:49 hr
+15. webpack.mix.js 
+``` 
+mix.js('resources/js/app.js', 'public/js')
+    .postCss('resources/css/app.css', 'public/css', [
+        //
+    ]);
+```
+- We can add scss by replacing to this.
+```
+mix.js('resources/js/app.js', 'public/js')
+    .sass('resources/scss/app.scss', 'public/css', [
+        //
+    ]);
+
+```
+- ```npm install```
+- ```npm run dev ```to run our webpack.
+- Compile by running ```npm run dev``` again.
+- run ```npm run watch ``` in one terminal and run your server on the other. It should auto update your css.
+16. Frontend Presets to Pull In [ Dont do when working on a project ]
+- cd on your project root
+- ```php artisan present tailwind``` last parameter can be bootstap, tailwindcss. Please check the github for tailwind 
+- ```php artisan ui tailwindcss``` Generates preset frameworks. Laravel is awesome.
+### DATABASE
+#### Eloquent
+- is an object relational matter. Using OOP-like.
+1. Where to access database. Go to ``` config/database.php ```. Bunch of database are written there. You can have more than one connection. Up to 5 database connections.
+2.  ```.env ``` to connect.
+3. Create Controller. ```php artisan make:controller PostsController ```
+4. Create a model by ```php artisan make:model Post ``` - needs to be singular.
+- Access App/http/Models to access your Model.
+5.  Add Migrations.
+- 2 Steps
+- [1] *not preferred*
+- ``` php artisan make:migration create_posts_table```
+- [2] *Preferred*
+- ``` php artisan make:model Post -m ``` to auto create the first step.
+6. Access migrations by going to ```database/migrations```
+- Laravel has default migration for user registrations etcc.
+7. Add table rows using migrations. 
+- Up method in your migrations migrates every code it has in it. You can rollback to the previous version using down method, or undo it.
+- Format.
+``` 
+ Schema::create('apps', function (Blueprint $table) {
+            $table->id();
+            $table->timestamps();
+        }); 
+```
+- to add table use this
+```
+  Schema::create('apps', function (Blueprint $table) {
+            $table->increments('id'); //increments name id
+            $table->string('title');   // $table->datatype(name)
+            $table->mediumText('body');
+            $table->timestamps();
+            // $table->id();
+            // $table->timestamps();
+        });
+```
+- ```php artisan migrate ``` to migrate, save changes.
+- ``` php artisan migrate:install ``` keep track on which migrations you have and have not run.  Pretty much the same as the migrate command.
+- ``` php artisan migrate:reset ``` call a down method roll backs(undo). DILI madelete ang naa sa imong migrations pero madelete tung sa database na migrations table.
+- ``` php artisan migrate:refresh ``` call a down method roll backs(undo). then runs the migration available. 
+-``` php artisan migrate:fresh ``` is same thing as refresh but doens't call down method. just delete tables and runs the up migrations again.
+-``` php artisan migrate:fresh ``` rollback only.
+-``` php artisan migrate:status ``` check table listing of every migrations whether or not it has been run yet on the environment.
+8. Factory Model - Creates Dummy data at ease.
+- ``` php artisan make:factory AppFactory ``` to create a Factory.
+- ``` php artisan make:factory AppFactory  --model=App``` determine your model. 
+- In your AppFactory.php 
+```
+<?php
+
+namespace Database\Factories;
+
+use Illuminate\Database\Eloquent\Factories\Factory;
+use Illuminate\Support\Str;
+/**
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\App>
+ */
+class AppFactory extends Factory
+{
+    /**
+     * Define the model's default state.
+     *
+     * @return array<string, mixed>
+     */
+    public function definition()
+    {
+        return [
+            'title' => $this->faker->title,
+            'body' => $this->faker->paragraph,
+            'created_at' => now(),
+
+        ];
+    }
+}
+
+```
+- strictly, the table names must be the same. $this->faker(calls generator)-> datatype
+- run by using ``` php artisan tinker ```
+- then generate by going inputting command ``` \App\Models\App::factory()->create(); ```
+- you can specify rows to add by using  ``` \App\Models\App::factory()->count(3)->create(); ```
+9. Query Builder
+- Two ways to write a query.
+```
+        //Non fluent table - only nice if beginners
+        // DB::select(['table'=> 'posts', 'where'=>['id'=>1]])
+        //Fluent Table - Allows Chaining - Preferable
+        // DB:table('posts') -> where ('id',1)->get()
+```
+- Selecting and printing a query.
+```
+    public function index(){
+       
+        $apps= DB::select('select * from apps');
+        dd($apps);
+     
+      }
+```
+- To avoid sql attacks use ```   $apps= DB::select('select * from apps WHERE id=?',[7]); ``` or  ```   $apps= DB::select('select * from apps WHERE id=:id',['id'=>7]); ```
+- CREATING YOUR OWN QUERY
+- This is called chaining as it chains different aspects of table. This is interpreted as 'select * from apps where id=7.' 
+```     
+$id=7;
+$apps= DB::table('apps')    
+->where('id',$id)->get(); 
+```
+- Getting just the body by ```     $apps= DB::table('apps') ->select('body')->get(); ```
+- where(column,comparisonoperator(>),value)
+- This is more complex ```   $apps= DB::table('apps')->select('title')->where('created_at','<',now()->subDay())->orWhere('title','Prof.')->get();  ```
+
+- WHERE between method. Scope between 5 to 9 ```          $apps= DB::table('apps')->select('title')->whereBetween('id',[5,9])->get(); ```
+
+- check if not Notnull. ```        $apps= DB::table('apps') ->whereNotNull('created_at')->get(); ```
+- whereRaw. Not recommended. Gets the raw unescaped string. 
+- distinct. Get all distinct data. ```    $apps= DB::table('apps')->select('title')->distinct()->get(); ```
+- orderby ```    $apps= DB::table('apps')->orderBy('title','asc')->get(); ```
+- sort ```    $apps= DB::table('apps')->latest()->distinct()->get(); ``` is based on created_at on descending order.
 

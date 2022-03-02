@@ -2,8 +2,9 @@
 @section('content')
 <body class="app">
     <div class="app-wrapper">
-        <div class="mer">ahsbdfahjfsb</div>
-    <h1> Hello</h1>
+        <div class="mer">Apps</div>
+    <h1> Hello {{ $id ?? 'dev'}}</h1>
     </div>
 </body>
 @endsection
+    

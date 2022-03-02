@@ -39,7 +39,7 @@
                                <div class="item p-3">
                                     <div class="row gx-2 justify-content-between align-items-center">
                                         <div class="col-auto">
-                                           <img class="profile-image" src="{{ URL('assets/images/profiles/profile-1.png') }}" alt="">
+                                           <img class="profile-image" src="{{ URL('/assets/images/profiles/profile-1.png') }}" alt="">
                                         </div><!--//col-->
                                         <div class="col">
                                             <div class="info"> 
@@ -90,7 +90,7 @@
                                <div class="item p-3">
                                     <div class="row gx-2 justify-content-between align-items-center">
                                         <div class="col-auto">
-                                           <img class="profile-image" src="{{ URL('assets/images/profiles/profile-2.png') }}" alt="">
+                                           <img class="profile-image" src="{{ URL('/assets/images/profiles/profile-2.png') }}" alt="">
                                         </div><!--//col-->
                                         <div class="col">
                                             <div class="info"> 
@@ -120,7 +120,7 @@
                     </div><!--//app-utility-item-->
                     
                     <div class="app-utility-item app-user-dropdown dropdown">
-                        <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="{{ URL('assets/images/user.png')}} " alt="user profile"></a>
+                        <a class="dropdown-toggle" id="user-dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false"><img src="{{ URL('/assets/images/user.png')}} " alt="user profile"></a>
                         <ul class="dropdown-menu" aria-labelledby="user-dropdown-toggle">
                             <li><a class="dropdown-item" href="account.html">Account</a></li>
                             <li><a class="dropdown-item" href="settings.html">Settings</a></li>
@@ -138,7 +138,7 @@
         <div class="sidepanel-inner d-flex flex-column">
             <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none">&times;</a>
             <div class="app-branding">
-                <a class="app-logo" href="index.html"><img class="logo-icon me-2" src="{{ URL('assets/images/app-logo.svg') }}" alt="logo"><span class="logo-text">PORTAL</span></a>
+                <a class="app-logo" href="index.html"><img class="logo-icon me-2" src="{{ URL('/assets/images/app-logo.svg') }}" alt="logo"><span class="logo-text">PORTAL</span></a>
 
             </div><!--//app-branding-->  
             
@@ -153,19 +153,19 @@
       <path fill-rule="evenodd" d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"/>
     </svg>
                              </span>
-                             <span class="nav-link-text">Overview</span>
+                             <span class="nav-link-text">Home</span>
                         </a><!--//nav-link-->
                     </li><!--//nav-item-->
                     <li class="nav-item">
                         <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="nav-link {{ request()->is('apps/*') ? 'active' : '' }}" href="{{route('apps')}}">
+                        <a class="nav-link {{ request()->is('account/*') ? 'active' : '' }}" href="{{route('account')}}">
                             <span class="nav-icon">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-folder" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 <path d="M9.828 4a3 3 0 0 1-2.12-.879l-.83-.828A1 1 0 0 0 6.173 2H2.5a1 1 0 0 0-1 .981L1.546 4h-1L.5 3a2 2 0 0 1 2-2h3.672a2 2 0 0 1 1.414.586l.828.828A2 2 0 0 0 9.828 3v1z"/>
 <path fill-rule="evenodd" d="M13.81 4H2.19a1 1 0 0 0-.996 1.09l.637 7a1 1 0 0 0 .995.91h10.348a1 1 0 0 0 .995-.91l.637-7A1 1 0 0 0 13.81 4zM2.19 3A2 2 0 0 0 .198 5.181l.637 7A2 2 0 0 0 2.826 14h10.348a2 2 0 0 0 1.991-1.819l.637-7A2 2 0 0 0 13.81 3H2.19z"/>
 </svg>
                              </span>
-                             <span class="nav-link-text" >Apps</span>
+                             <span class="nav-link-text" >Account</span>
                         </a><!--//nav-link-->
                     </li><!--//nav-item-->
                     <li class="nav-item">
@@ -180,7 +180,7 @@
 <circle cx="3.5" cy="10.5" r=".5"/>
 </svg>
                              </span>
-                             <span class="nav-link-text">Orders</span>
+                             <span class="nav-link-text">Application Form</span>
                         </a><!--//nav-link-->
                     </li><!--//nav-item-->
                     <li class="nav-item has-submenu">
@@ -249,7 +249,7 @@
                     
                     <li class="nav-item">
                         <!--//Bootstrap Icons: https://icons.getbootstrap.com/ -->
-                        <a class="nav-link" href="help.html">
+                        <a class="nav-link" href="{{ route('help')}} ">
                             <span class="nav-icon">
                             <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-question-circle" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
 <path fill-rule="evenodd" d="M8 15A7 7 0 1 0 8 1a7 7 0 0 0 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>

@@ -12,11 +12,11 @@
 			    <div class="app-card alert alert-dismissible shadow-sm mb-4 border-left-decoration" role="alert">
 				    <div class="inner">
 					    <div class="app-card-body p-3 p-lg-4">
-						    <h3 class="mb-3">Welcome, Mer!</h3>
+						    <h3 class="mb-3">Welcome, {{ $data ?? "developer" }}</h3>
 						    <div class="row gx-5 gy-3">
 						        <div class="col-12 col-lg-9">
 							        
-							        <div>{{ $apps ?? "No apps" }}</div>
+							        <div>{{ $description ?? "No apps" }}</div>
 							    </div><!--//col-->
 							    <div class="col-12 col-lg-3">
 								    <a class="btn app-btn-primary" href="https://themes.3rdwavemedia.com/bootstrap-templates/admin-dashboard/portal-free-bootstrap-admin-dashboard-template-for-developers/"><svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-file-earmark-arrow-down me-2" fill="currentColor" xmlns="http://www.w3.org/2000/svg">

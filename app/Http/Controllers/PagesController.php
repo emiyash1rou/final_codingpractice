@@ -13,7 +13,7 @@ class PagesController extends Controller
     //       'samsong' =>'heashee'
     //   ];
         // print_r(route('apps'));
-      return view('pages.index');
+        return view('pages.index',['data'=>"Mer"]);
 
     // return view('apps.index')->with('data',$data);
     // return view('apps.index',[
@@ -22,10 +22,14 @@ class PagesController extends Controller
     // ]);
   }
   public function home(){
-    return view('pages.home',['apps'=>"hello"]);
+    return view('pages.index');
+   
 }
-  public function about(){
-    return view('pages.index',['apps'=>"hello"]);
+  public function help(){
+    return view('pages.help',['apps'=>"hello"]);
+}
+public function account(){
+  return view('pages.account',['apps'=>"hello"]);
 }
 public function show($id){
     $data=[
