@@ -13,7 +13,7 @@ class AppsController extends Controller
         // DB:table('posts') -> where ('id',1)->get()
         $id=7;
         $apps= DB::table('apps')
-        ->select('title')->distinct()->get();
+        ->where('id','=',10)->delete();
         dd($apps);
         //   return view('apps.index',[$apps]);
       }

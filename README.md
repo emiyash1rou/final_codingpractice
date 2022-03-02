@@ -308,5 +308,19 @@ $apps= DB::table('apps')
 - whereRaw. Not recommended. Gets the raw unescaped string. 
 - distinct. Get all distinct data. ```    $apps= DB::table('apps')->select('title')->distinct()->get(); ```
 - orderby ```    $apps= DB::table('apps')->orderBy('title','asc')->get(); ```
-- sort ```    $apps= DB::table('apps')->latest()->distinct()->get(); ``` is based on created_at on descending order.
+- sort ```    $apps= DB::table('apps')->latest()->get(); ``` is based on created_at on descending order. Replace ```latest``` to ```oldest``` to get it ascending. or ```inRandomOrder()``` to get it random.
+- Returning Methods.
+- replacing ```get()``` to ```first()``` to get the head. Limit(1).
+- find id by replacing ```get()``` to ``find($id)``. When empty, a ````null``` is returned.
+- to get the count of the query found. Replace ```get()``` to ``` count() ```
+- to get minimum, Replace ```get()``` to ``` min($id) ``` to max, just replace ```min``` to ```max```.
+- to get the sum/average. Do this ```    $apps= DB::table('apps')->avg('id'); ``` . Replace ```avg()``` to ``` sum($id) ``` to max
+10. Inserting to Database. ```         $apps= DB::table('apps')->insert(['title'=> 'New Post','body'=>'New body']); ```
+11. Update the table 
+```         
+$apps= DB::table('apps')
+        ->where('id','=',10)->update(['title'=>'asdsad title','body'=>'asda yarn']); 
+```
+12. Delete the query by ```$apps= DB::table('apps')->where('id','=',10)->delete(); ```
+### ELOQUENT 
 
