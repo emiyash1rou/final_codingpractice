@@ -323,4 +323,136 @@ $apps= DB::table('apps')
 ```
 12. Delete the query by ```$apps= DB::table('apps')->where('id','=',10)->delete(); ```
 ### ELOQUENT 
+- AN ORM. Object Relational Manner.
+- Simplicity is Eloquent's Focus.
+- Relies on convention over configuration. (Minimal Code)
+- Make a model and migrate it ``` php artisan make:model Mineral -m ```
+- Create a resource controller by doing ``` php artisan make:controller MineralsController --resource ```
+- see your route list by doing ``` php artisan route:list ```
+- Link your resource in web.php using ``` Route::resource('/',MineralsController::class); ``` Don't forget to import it using ``` use App\Http\Controllers\MineralsController; ```
+- difference between resource controller and controller is that you don't need to define routes in resourcecontroller since they will be defined in the resouce whereas controller alone, you need to define them in the web.php.
+- You can change model by going to its model to define. Default behavior of table name is snake cases and pluralize your class name. Manipulate it by adding a property ``` protected $table = 'minerals'; // overrides the table name to minerals ```
+- change primary key by creating new property ``` protected $primaryKey='name'; ``` or you can just delete it in ``` protected $primaryKey=null; ```
+- create new property that disable the $timestamp by ``` protected $timestamps=false; ``` or you can customize the format by ``` protected $dateFormat='h:m:s'; ```
+- These are all optional
+1. Retrieve data with Eloquent. 
+- Import the Model in your MineralsController. ``` use App\Models\Mineral; ```
+- Perform a select * by creating a variable and get Object and .all() 
+```
+  public function index()
+    {
+        $minerals=Mineral::all();
+        dd($minerals);
+       return view('minerals.index');
+    }
+```
+- similar to facade db  ```  $minerals=Mineral::where('title','=','first mineral')->get(); ```
+2. Breaking down request to chunks makes us avoid memory/locking issues.
+- Method to break request to smaller pieces.
+- chunk(amountofrowswhereyouwanttochunk, function(){
+
+})
+``` 
+$minerals=Mineral::chunk(2,function($minerals){
+            foreach($minerals as $mineral){
+                print_r($mineral);
+            }
+        });
+```
+- Performing 2 queries of 2 rows. Probs splitting the database into two and doing the command query.
+```
+  public function index()
+    {
+        // $minerals=Mineral::all();
+        $minerals=Mineral::where('title','=','first mineral')->get();
+
+        $minerals=Mineral::chunk(2,function($minerals){
+            foreach($minerals as $mineral){
+                print_r($mineral);
+            }
+        });
+```
+- if no model is found, throw an exception by using firstorfail ```       $minerals=Mineral::where('title','=','first mineral')->firstOrFail(); ``` note: returns a single json format. foreach is not applicable. rather use $minerals->title or $minerals['title']
+3. Save function Create Functionality. 
+```
+ public function store(Request $request)
+    {
+        //
+        $mineral=new Mineral;
+        $mineral->name=$request->input('name_of_minerals');
+        $mineral->save();
+    }
+
+```
+- Other way through passing array is ```         $mineral= Mineral::create(['name_of_minerals'=>$request->input('name_of_minerals')]); ``` but you need to assign the mass assignment by going to your model and assigning ``` protected $fillable = ['name_of_minerals']; ```
+- $fillable=[columns that can be massed assigned, consistent ilang form names until db columns]
+- Additional! You can replace Mineral::create() to Mineral::make() but it doesn't automatically save it. You need to call ->save() to save it.
+4. Read Functionality 
+```
+```
+
+5. Update Functionality
+```
+  public function update(Request $request, $id)
+    {
+        //
+        $mineral= Mineral::where('id',$id)->update(['name_of_minerals'=>$request->input('name_of_minerals')]);
+        return redirect('/minerals');
+    }
+
+```
+6. Destroy Functionality
+```
+  public function destroy($id)
+    {
+        //
+        $mineral= Mineral::find($id)->first();
+        $mineral->delete();
+        return redirect('/minerals');
+    }
+```
+7. Eloquent Serialization
+- Returning multiple rows returns a collection which is an array with steroids.
+- ORM falls short with Serializaiton. 
+- CLEAR laravel code in index.blade.php becasuse we are not going to be using arrays anymore.
+- Laravel only uses JSON for API's. Collections are converted to array.
+- If you want to use Json then you need to decode it.
+- To decode use:
+```
+    public function index()
+    {
+      
+        $minerals=Mineral::all()->toJson();
+        $minerals=json_decode($minerals);
+        var_dump($minerals);
+       return view('minerals.index',['minerals'=>$minerals]);
+
+    }
+    // change toJson to toArray() and clear json_decode if you want it to be array.
+
+```
+- to hide some values to be retrieved then in your model user ``` protected $hidden=['password','retrieve_token']; ``` the opposite of it would be to whitelist them by using  ``` protected $visible=['title','description']; ```
+- To immediately pass model inside of method
+- From this...
+```
+public function destroy($id)
+    {
+        //
+        $mineral= Mineral::find($id)->first();
+        $mineral->delete();
+        return redirect('/minerals');
+    }
+```
+- to this...
+```
+public function destroy(Mineral $mineral)
+    {
+        $mineral->delete();
+        return redirect('/minerals');
+    }
+```
+
+- it saves code and time since you don't need to get it.
+
+
 
