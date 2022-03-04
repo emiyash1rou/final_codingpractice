@@ -453,6 +453,120 @@ public function destroy(Mineral $mineral)
 ```
 
 - it saves code and time since you don't need to get it.
+8. Eloquent - Relationships
+- Tables that are related to each other.
+- One to Many Relationship
+- Mineral_Specification unique_id with timestamps
+- 2 Ways to handle migration.
+- Handle in one existing migration or add code in existing migration. Former is easier but latter is recommended.
+- In your migrations create_minerals code enter
+```
+  Schema::create('specification', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('mineral_id');
+            $table->string('specification_name');
+            $table->timestamps();
+            $table->foreign('mineral_id')->references('id')->on('minerals')->onDelete('cascade');
+        });
+```
+- where mineral_id is referenced from a table id on minerals. Cascade deletes whenever a primary key referenced is deleted. Like if you delete a mineral, obviously, the records of the pertaining specifications should be deleted as well.
+- NOTE: you can replace cascade onto 'set null' to set null the referenced keys and not cause it to be deleted.
+- migrate it. ``` php artisan migrate:rollback ``` then ``` php artisan migrate ```
+- Declaring show model. 
++--------------------+------------------+------+-----+---------+----------------+
+| Field              | Type             | Null | Key | Default | Extra          |
++--------------------+------------------+------+-----+---------+----------------+
+| id                 | int(10) unsigned | NO   | PRI | NULL    | auto_increment |
+| mineral_id         | int(10) unsigned | NO   | MUL | NULL    |                |
+| specification_name | varchar(255)     | NO   |     | NULL    |                |
+| created_at         | timestamp        | YES  |     | NULL    |                |
+| updated_at         | timestamp        | YES  |     | NULL    |                |
++--------------------+------------------+------+-----+---------+----------------+
+- MUL basically shows that these key can exist multiple.
+- Now, we need to create the specification model since a mineral can have multiple mineral specifications but there can only be one mineral in a specification.So what we need to do is have a model. ``` php artisan make:model MineralSpecification ```. 
+- Then on your main model. The Mineral Model. Define the relationship between the Mineral and MineralSpecifications.
+```
+
+    public function mineralSpecifications(){
+        return $this->hasMany(MineralMode::class);
+
+    }
+```
+- Then establish the relationship between MineralSpecification and Mineral by:
+```
+class MineralSpecification extends Model
+{
+    use HasFactory;
+    protected $table='specification';
+    protected $primaryKey='id';
+    // A mineral specification belongs to a mineral.
+
+    public function mineral(){
+        return $this->belongsTo(Mineral::class);
+    }
+}
+```
+- Call the function to access its data by calling the function from the connected Model to retrieve foreign key details.
+```
+        <tbody>
+                                     
+                                        @forelse($minerals->mineralSpecifications as $each_mineral)
+                                
+                                        <tr>
+                                            <td class="cell">{{$each_mineral->id}}</td>
+                                            <td class="cell"><span class="truncate">{{$each_mineral->specification_name}}</span></td>
+                                            <td class="cell">{{$each_mineral->created_at}}</td>
+                                            <td class="cell"><span class="cell-data">{{$each_mineral->updated_at}}</td>
+                                            <td class="cell"><a class="btn-sm app-btn-secondary" href="/minerals/{{$each_mineral->id}}/show">View</a></td>
+                                           
+                                        </tr>
+                                        @empty
+                                        <tr><td colspan="12">No Specification record collected.&nbsp; <a href="/minerals/caryl">Create one here.</a></td>
+                                        @endforelse
+                                        
+
+    
+                                    </tbody>
+```
+- PAGINATION in laravel
+- Put pagination in your code retrieval. There are two ways
+```
+        // Pagination Path Query Builder
+         $minerals=DB::table('minerals')->paginate(4);
+        // endpagination
+        // Pagination Eloquent
+        $minerals= Mineral::paginate(3);
+```
+- To create your custom pagination access app/Providers/AppServiceProviders.php and import ``` use Illuminate\Pagination\Paginator; ``` and then allow methhod boot to use Bootstrap. by inserting in boot method ```    Paginator::useBootstrap(); ```
+- Don't forget to import bootstrap in your CDN in your website.
+# STOPPED AT 4:50 . MANY TO MANY ELOQUENT DOESN'T APPLY ATM.
+- HasMany Relationship. 
+- Create a model and migration ``` php artisan make:model Engine -m```
+- Then in your migrations declare your variables
+```
+ Schema::create('engines', function (Blueprint $table) {
+            $table->increments('id');
+            $table->unsignedInteger('model_id');
+            $table->string('specification_name');
+            $table->timestamps();
+            $table->foreign('model_id')->references('id')->on('specification')->onDelete('cascade');
+        });
+```
+- add data in engines table.
+- we dont need to do anything in our engines model. instead go to the minerals model and put this. Because Minerals->
+```
+public function engines(){
+        return $this->hasManyThrough(Engine::class,ModelSpecification::class);
+
+    }
+```
+- hasManyThrough(tablethatweneedtoaccess,modelthatweneedinordertoaccesstheengine). Ang table na need tapos ang model na naay relation sa engine
+- Ang mineral <img src="/readmeImages/hasMany.png">
+
+# SKIPPED TO 5:14 REQUESTS
+
+
+
 
 
 
