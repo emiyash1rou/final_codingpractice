@@ -561,13 +561,55 @@ public function engines(){
     }
 ```
 - hasManyThrough(tablethatweneedtoaccess,modelthatweneedinordertoaccesstheengine). Ang table na need tapos ang model na naay relation sa engine
-- Ang mineral <img src="readmeImages/hasMany.png">
-
 ![Relationship Table](/readmeImages/hasMany.PNG)
 # SKIPPED TO 5:14 REQUESTS
+9. Form Validation
+- Go to controller method that needs to add or update. Codes where you retrieve an input. 
+- Add ``` $request->validate([values in your input field]); ```
+- Validate method will check the incoming data in the request and check if it's true or not. If it's valid then it will continue with the code. If not, it will throw a validationException and redirect you to previous page. 
+- Add a pipe to put more constraints.  ``` $request->validate(['name'=>required|unique:minerals); ``` you can also replace pipe and make it an array
+![Request Pipe](/readmeImages/requestPipe.PNG)
+- Add the exception catch in your UI by going to your view. Create if statement.
+```
+     @if($errors->any())
+                            <div class="w-4/8 m-auto text-center">
+                                @foreach ($errors->all() as $error)
+                                <li class="text-red-500 list-none">{{$error}}</li>
+                                @endforeach
+                            </div>
+                            @endif
+```
+10. Creating Custom Rules
+- ``` php artisan make:rule Uppercase ```
+- Customize rule by going to app/Rules/Uppercase.php. 
+- In your passes method,first parameter $attribute is the exception while $value is the user-provided value. This method returns a boolean whether or not the input passes the validaiton rule.
+- message method returns the validation error messages.
+![Rules](/readmeImages/rules.PNG)
+- Import to the Controller that it will be used. ``` use App\Rules\Uppercase;
+- in store method
+```
+$request->validate(['name'=>new Uppercase)
+```
+11. Validations
+- Avoid Repeated Patterns in your Controller
+- Structurize Code Better by FormRequest ``` php artisan make:request CreateMineralRequest ```
+- go to App/Http/Request
+- two methods authorize and rules. Both public so they are available in any point. 
+- authorize method if it returns true then it is authorized to perform the request. Else it will be rejected. So set it in true.
+- rules is where your validation goes 
+- Add this to perform strip_tags in your Form Request.
+```
+ protected function prepareForValidation(){
+        $this->merge([
+            'guitar-name'=>strip_tags($this['guitar-name']),
+            'brand' => strip_tags($this->brand),
+            'year-made' => strip_tags($this['year-made']),
 
-
-
-
+        ]);
+    }
+```
+- then on your controller method jclear out the validation and replace with this ``` $request->validated(); ``` remember. validate() and validated() are two different entittes.
+- since code is similar to update method controller. Use FormRequest there too.
+# FINISHED YEY
 
 
