@@ -561,7 +561,7 @@ public function engines(){
     }
 ```
 - hasManyThrough(tablethatweneedtoaccess,modelthatweneedinordertoaccesstheengine). Ang table na need tapos ang model na naay relation sa engine
-- Ang mineral <img src="/readmeImages/hasMany.png">
+- Ang mineral <img src="readmeImages/hasMany.png">
 
 # SKIPPED TO 5:14 REQUESTS
 
